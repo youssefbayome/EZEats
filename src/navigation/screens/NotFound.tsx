@@ -9,7 +9,7 @@ export function NotFound() {
     </View>
   );
 }
-
+export default NotFound
 const styles = StyleSheet.create({
   container: {
     flex: 1,
