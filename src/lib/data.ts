@@ -1,0 +1,223 @@
+import { Order } from "./Types";
+
+export const orders: Order[] = [
+  {
+    id: "1",
+    waiter: "Waiter Name",
+    code: "TX-1231",
+    time: "19:24 PM",
+    type: "PickUp",
+    smsEnabled: true,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+  {
+    id: "2",
+    waiter: "Waiter Name",
+    code: "S42",
+    time: "19:24 PM",
+    type: "Delivery",
+    smsEnabled: false,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+  {
+    id: "3",
+    waiter: "Waiter Name",
+    code: "TX-66",
+    time: "19:24 PM",
+    type: "Table",
+    smsEnabled: false,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+];
+
+export const readyOrders: Order[] = [
+  {
+    id: "1",
+    waiter: "Waiter Name",
+    code: "TX-1231",
+    time: "19:24 PM",
+    type: "PickUp",
+    smsEnabled: true,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+  {
+    id: "2",
+    waiter: "Waiter Name",
+    code: "S42",
+    time: "19:24 PM",
+    type: "Delivery",
+    smsEnabled: false,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+  {
+    id: "3",
+    waiter: "Waiter Name",
+    code: "TX-66",
+    time: "19:24 PM",
+    type: "Table",
+    smsEnabled: false,
+    clientName: "Client Name",
+    price: 2000,
+    items: [
+      {
+        name: "Cheesy Buffalo Burger",
+        quantity: 2,
+        price: 650,
+        image: "https://example.com/burger.jpg",
+        extras: [
+          { name: "Extra Cheese", price: 45 },
+          { name: "Extra Mayo", price: 15 },
+          { name: "Extra Pickles", price: 25 },
+        ],
+        notes: "Please make sure to remove onions from one of the sandwiches",
+      },
+      {
+        name: "Buffalo Signature Fries",
+        quantity: 4,
+        price: 250,
+        image: "https://example.com/fries.jpg",
+      },
+      {
+        name: "Coca-Cola",
+        quantity: 3,
+        price: 100,
+        image: "https://example.com/coke.jpg",
+      },
+    ],
+  },
+];

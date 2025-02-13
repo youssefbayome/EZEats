@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
@@ -11,109 +10,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
 import { Colors } from "../../constants/Colors";
+import { orders, readyOrders } from "@/src/lib/data";
+import OrderItem from "@/src/components/Home/Order";
+import Text from "@/src/components/shared/Text";
+type OrderListProps = {
+  data: any[];
+};
 
-//mock data from api for example
-const allOrders = [
-  {
-    id: "1",
-    waiter: "Waiter Name",
-    code: "TX-1231",
-    time: "19:24 PM",
-    type: "Pickup",
-    smsEnabled: true,
-  },
-  {
-    id: "2",
-    waiter: "Waiter Name",
-    code: "S42",
-    time: "19:24 PM",
-    type: "Delivery",
-    smsEnabled: false,
-  },
-  {
-    id: "3",
-    waiter: "Waiter Name",
-    code: "TX-66",
-    time: "19:24 PM",
-    type: "Table 7",
-    smsEnabled: false,
-  },
-];
+const OrderList = ({ data }: OrderListProps) => {
+  return (
+    <FlatList
+      data={data}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={{ paddingHorizontal: 26, paddingVertical: 19 }}
+      renderItem={({ item }) => <OrderItem item={item} />}
+      ListEmptyComponent={
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>No orders available</Text>
+        </View>
+      }
+    />
+  );
+};
 
-const readyOrders = [
-  {
-    id: "1",
-    waiter: "Waiter Name",
-    code: "TX-1231",
-    time: "19:24 PM",
-    type: "Pickup",
-    smsEnabled: true,
-  },
-  {
-    id: "2",
-    waiter: "Waiter Name",
-    code: "S42",
-    time: "19:24 PM",
-    type: "Delivery",
-    smsEnabled: false,
-  },
-  {
-    id: "3",
-    waiter: "Waiter Name",
-    code: "TX-66",
-    time: "19:24 PM",
-    type: "Table 7",
-    smsEnabled: false,
-  },
-];
-
-const OrderList = ({ data }: { data: any }) => (
-  <FlatList
-    data={data}
-    keyExtractor={(item) => item.id}
-    contentContainerStyle={{ paddingHorizontal: 26, paddingVertical: 19 }}
-    renderItem={({ item }) => (
-      <Pressable style={styles.card}>
-        <View style={styles.row}>
-          <Text style={styles.waiterName}>{item.waiter}</Text>
-          <Text style={styles.code}>{item.code}</Text>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.detailsRow}>
-            <Ionicons name="time-outline" size={18} color="gray" />
-            <Text style={styles.time}>{item.time}</Text>
-          </View>
-          <View style={styles.detailsRow}>
-            <Ionicons name="walk-outline" size={18} color="gray" />
-            <Text style={styles.type}>{item.type}</Text>
-          </View>
-        </View>
-        <View style={styles.buttons}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              item.smsEnabled ? styles.activeButton : styles.disabledButton,
-            ]}
-            disabled={!item.smsEnabled}
-          >
-            <Text style={styles.buttonText}>Send SMS</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.activeButton]}>
-            <Text style={styles.buttonText}>Picked Up</Text>
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-    )}
-  />
-);
-const AllRoute = () => <OrderList data={allOrders} />;
+const AllRoute = () => <OrderList data={orders} />;
 const ReadyRoute = () => <OrderList data={readyOrders} />;
 function Home() {
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "All", title: "Orders" },
+    { key: "All", title: "Home" },
     { key: "Ready", title: "Ready" },
   ]);
 
@@ -125,7 +54,10 @@ function Home() {
     <TabBar
       {...props}
       // scrollEnabled={false}
-      indicatorStyle={[styles.indicator, { backgroundColor: Colors.secondary }]}
+      indicatorStyle={[
+        styles.indicator,
+        { backgroundColor: "rgba(41, 55, 107, 1)" },
+      ]}
       style={styles.tabBar}
       tabStyle={{ flex: 1 }}
       activeColor={Colors.secondary}
@@ -136,7 +68,11 @@ function Home() {
       }: {
         route: { key: string; title: string };
         focused: boolean;
-      }) => <Text style={[styles.tabLabel]}>{route.title}</Text>}
+      }) => (
+        <Text style={[styles.tabLabel]} variant="bold">
+          {route.title}
+        </Text>
+      )}
     />
   );
 
@@ -219,8 +155,6 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
   },
 
   indicator: {

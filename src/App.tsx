@@ -1,17 +1,14 @@
-
 import * as React from "react";
 import Navigation from "./navigation";
-import { StatusBar, Platform } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
+import { StatusBar, Platform, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Provider } from "react-redux";
-import { store } from "@/store";
-
-
-SplashScreen.preventAutoHideAsync();
-
+import { store, persistor } from "@/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export function App() {
 
@@ -22,10 +19,8 @@ export function App() {
     null
   );
 
-
   React.useEffect(() => {
     registerForPushNotificationsAsync();
-
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log("go a notfication", notification);
@@ -48,14 +43,29 @@ export function App() {
 
   return (
     <SafeAreaProvider>
-      <Provider store={store}>
-        <Navigation />
-      </Provider>
-      <StatusBar barStyle={"dark-content"} />
+      <GestureHandlerRootView style={styles.container}>
+        <BottomSheetModalProvider>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <Navigation />
+            </PersistGate>
+          </Provider>
+          <StatusBar
+            barStyle={
+              Platform.OS === "android" ? "light-content" : "dark-content"
+            }
+          />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 async function registerForPushNotificationsAsync() {
   if (Device.isDevice) {
     const { status: existingStatus } =

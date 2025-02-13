@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  KeyboardAvoidingView,
-  Platform,
+  Alert,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../..";
@@ -14,7 +12,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Colors } from "@/src/constants/Colors";
 import { useDispatch } from "react-redux";
 import { login } from "@/src/redux/slices/user";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "@/src/components/shared/Icons";
+import Text from "@/src/components/shared/Text";
+import { sendOTP } from "@/src/lib/helpers";
 type Props = NativeStackScreenProps<RootStackParamList, "OTPVerification">;
 
 const OTPVerificationScreen = () => {
@@ -25,7 +26,8 @@ const OTPVerificationScreen = () => {
   const { phoneNumber } = route.params || {};
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [timer, setTimer] = useState(45);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const insets = useSafeAreaInsets();
   const inputRefs = useRef<Array<TextInput | null>>([]);
 
   useEffect(() => {
@@ -56,23 +58,31 @@ const OTPVerificationScreen = () => {
     sendOTP(phoneNumber);
   };
 
-  const verifyOTP = (phone: string) => {
-    dispatch(login(phone));
+  const verifyOTP = async (otp: string) => {
+    setIsLoading(true);
+
     setTimeout(() => {
+      dispatch(login(phoneNumber));
       navigation.navigate("HomeTabs");
+
+      setIsLoading(false);
     }, 1000);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <View style={styles.content}>
-        <Text style={styles.text}>
+    <View style={styles.container}>
+      <View style={[styles.content, { paddingTop: insets.top }]}>
+        <TouchableOpacity
+          style={{ marginBottom: 16, alignSelf: "flex-start" }}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon name="ChevLeft" />
+        </TouchableOpacity>
+
+        <Text align="left" size={16}>
           We have sent a 4-digit code to your phone number{" "}
-          <Text style={{ fontWeight: "600" }}>{phoneNumber || null}</Text>,
-          please enter it below.
+          <Text variant="bold">{phoneNumber || null}</Text>. Please enter it
+          below to continue.
         </Text>
 
         <View style={styles.otpContainer}>
@@ -92,22 +102,23 @@ const OTPVerificationScreen = () => {
                   inputRefs.current[index - 1]?.focus();
                 }
               }}
+              editable={!isLoading}
             />
           ))}
         </View>
 
         <Text style={styles.timer}>00:{timer < 10 ? `0${timer}` : timer}</Text>
 
-        <TouchableOpacity onPress={resendOtp} disabled={timer > 0}>
+        <TouchableOpacity onPress={resendOtp} disabled={timer > 0 || isLoading}>
           <Text style={styles.resendText}>Didn't receive code?</Text>
           <Text
             style={{
               color: timer > 0 ? Colors.textSecondary : Colors.primary,
               textAlign: "center",
-              fontWeight: "800",
               fontSize: 20,
               textDecorationLine: "underline",
             }}
+            variant="bold"
           >
             Resend
           </Text>
@@ -116,21 +127,20 @@ const OTPVerificationScreen = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => verifyOTP(phoneNumber)}
-          disabled={otp.includes("")}
+          style={[styles.button, isLoading && styles.disabledButton]}
+          onPress={() => verifyOTP(otp.join(""))}
+          disabled={otp.includes("") || isLoading}
         >
-          <Text style={styles.buttonText}>Confirm OTP</Text>
+          <Text style={styles.buttonText}>
+            {isLoading ? "Verifying..." : "Confirm OTP"}
+          </Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
-const sendOTP = (phone: string) => {
-  console.log(`Resending OTP to ${phone}`);
-};
-
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -141,7 +151,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  text: { fontSize: 16, textAlign: "center" },
   otpContainer: {
     flexDirection: "row",
     marginVertical: 80,
@@ -157,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     margin: 5,
     fontWeight: "700",
+    color: Colors.darkText,
   },
   timer: {
     fontSize: 48,
@@ -166,7 +176,6 @@ const styles = StyleSheet.create({
   },
   resendText: {
     fontSize: 20,
-    fontWeight: "500",
     marginBottom: 10,
   },
   buttonContainer: {
@@ -179,7 +188,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  disabledButton: {
+    backgroundColor: Colors.textSecondary,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default OTPVerificationScreen;

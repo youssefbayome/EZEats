@@ -1,13 +1,15 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
-import LogoRight from "../../assets/images/logoRight.png";
-import LogoLeft from "../../assets/images/Group 33664.png";
+
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "../shared/Icons";
 const Header = () => {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { paddingTop: insets.top + 20 }]}>
       <View style={styles.leftContainer}>
-        <Image source={LogoLeft} style={styles.logoLeft} />
+        <Icon name={"HeaderLeftLogo"} style={styles.logoLeft} />
         <View>
           <Text style={styles.restaurantName}>Restaurant Name</Text>
           <Text style={styles.timing}>8:00 - 16:00</Text>
@@ -15,7 +17,7 @@ const Header = () => {
       </View>
 
       <View style={styles.rightContainer}>
-        <Image source={LogoRight} style={styles.logoRight} />
+        <Icon name="HeaderRightLogo" />
       </View>
     </View>
   );
@@ -26,22 +28,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 126,
+
+    // paddingTop: 20,
     backgroundColor: "rgba(255, 255, 255, 1)",
-    paddingTop: 40, 
   },
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
     paddingHorizontal: 20,
-
   },
   logoLeft: {
     width: 40,
     height: 40,
     borderRadius: 50,
-    resizeMode: "cover",
   },
   restaurantName: {
     fontSize: 20,
