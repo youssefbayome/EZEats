@@ -1,27 +1,34 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   Image,
   StatusBar,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Notifications from "expo-notifications";
-import EZLogo from "@/src/assets/images/ezlogo.png";
-import Phone from "@/src/assets/images/phoneBlack.png";
+import Icon from "@/src/components/shared/Icons";
 import { Colors } from "@/src/constants/Colors";
-
+import Text from "@/src/components/shared/Text";
+import Button from "@/src/components/shared/Button";
+import { sendOTP } from "@/src/lib/helpers";
 const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
   const handleLogin = () => {
+    if (phoneNumber.length < 11) {
+      Alert.alert(
+        "Invalid phone number",
+        "Phone number must be at least 11 digits long."
+      );
+      return;
+    }
     sendOTP({ phoneNumber });
     navigation.navigate("OTPVerification", { phoneNumber });
   };
@@ -30,7 +37,7 @@ const LoginScreen = () => {
     <LinearGradient colors={["#EA374A", "#F47B88"]} style={styles.container}>
       <View style={[styles.topContainer, { paddingTop: insets.top }]}>
         <View style={styles.logoContainer}>
-          <Image source={EZLogo} resizeMode="contain" style={styles.logo} />
+          <Icon name="LoginLogo" style={styles.logo} />
         </View>
         <Text style={styles.subText}>
           Login to get started with a seamless restaurant management experience
@@ -40,7 +47,12 @@ const LoginScreen = () => {
       <View style={styles.bottomContainer}>
         <View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-            <Image source={Phone} style={styles.icon} />
+            <Icon
+              name="Phone"
+              color="rgba(61, 61, 67, 1)"
+              style={styles.icon}
+              size={14}
+            />
             <Text style={styles.inputLabel}> Phone Number</Text>
           </View>
 
@@ -51,32 +63,19 @@ const LoginScreen = () => {
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
-            returnKeyType="send"
+            returnKeyType="done"
           />
         </View>
-        <TouchableOpacity
+        <Button
+          title="Login"
+          textStyle={{ fontSize: 20, fontWeight: "600" }}
           style={[styles.button, { backgroundColor: Colors.primary }]}
           onPress={handleLogin}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        />
       </View>
       <StatusBar hidden />
     </LinearGradient>
   );
-};
-
-const sendOTP = async ({ phoneNumber }: { phoneNumber: string }) => {
-  const otp = Math.floor(1000 + Math.random() * 9000).toString();
-
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "Your OTP Code",
-      body: `Your OTP for login is: ${otp}`,
-      sound: "default",
-    },
-    trigger: null,
-  });
 };
 
 const styles = StyleSheet.create({
@@ -102,9 +101,9 @@ const styles = StyleSheet.create({
   subText: {
     textAlign: "center",
     fontSize: 16,
-    color: "white",
-    fontWeight: "500",
+    color: "rgba(255, 255, 255, 1)",
     lineHeight: 19.09,
+    fontWeight: "500",
   },
   bottomContainer: {
     flex: 1,
@@ -134,6 +133,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 15,
+    paddingVertical: 15,
     borderRadius: 100,
     marginTop: 20,
     width: "100%",
