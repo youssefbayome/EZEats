@@ -4,9 +4,11 @@ const Arabic = {
   profile: "الملف الشخصي",
   options: "الخيارات",
   language: "اللغة",
+  continue: "استمرار",
   changeLanguage: "تغيير لغة التطبيق",
   goHome: "الذهاب إلى الشاشة الرئيسية",
   save: "حفظ",
+  cancel: "الغاء",
   screen404: "هذه الشاشة غير موجودة",
   Home: "الرئيسية",
   titleNotFound: "لم يتم العثور",
@@ -53,6 +55,10 @@ const Arabic = {
   phoneNo: "رقم الهاتف",
   intro: "قم بالتسجيل لتستمع ب تجربة مميزة",
   enterPhone: "ادخل رقم الهاتف",
+  refund: "استرداد",
+  refundMsgTitle: "مطلوب موافقة الإدارة",
+  refundMsgBody:
+    "يتطلب هذا الإجراء موافقة الإدارة. هل تريد استرداد المبلغ المدفوع للطلب ",
 };
 
 export default Arabic;

@@ -21,15 +21,15 @@ const OrderDetailsScreen = () => {
 
   const handleRefund = () => {
     Alert.alert(
-      "Management Approval Required",
-      `This action requires management approval. Do you want to refund order with ${order.code}?`,
+      Locales.t("refundMsgTitle"),
+      `${Locales.t("refundMsgBody")} ${order.code}?`,
       [
         {
-          text: "Cancel",
+          text: Locales.t("cancel"),
           style: "cancel",
         },
         {
-          text: "Continue",
+          text: Locales.t("continue"),
           onPress: () => {},
           style: "destructive",
         },
@@ -40,7 +40,7 @@ const OrderDetailsScreen = () => {
     navigation.setOptions({
       headerRight: () => (
         <Button
-          title="Refund"
+          title={Locales.t("refund")}
           style={{ backgroundColor: Colors.primary, paddingHorizontal: 20 }}
           textStyle={{
             fontWeight: "600",
