@@ -8,7 +8,7 @@ const English = {
   language: "Language",
   changeLanguage: "Change app's language",
   system: "System",
-
+  continue: "Continue",
   goHome: "Go to home screen",
   save: "Save",
   screen404: "This screen doesn't exist",
@@ -59,6 +59,10 @@ const English = {
     "Login to get started with a seamless restaurant management experience",
   phoneNo: "Phone Number",
   enterPhone: "Please Enter your phone number",
+  refund: "Refund",
+  refundMsgTitle: "Management Approval Required",
+  refundMsgBody:
+    "This action requires management approval. Do you want to refund order with",
 };
 
 export default English;
