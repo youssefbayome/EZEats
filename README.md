@@ -58,7 +58,9 @@ This is a **React Native** application built with **Expo**, featuring push notif
 ##  Build & Deployment
 - **Testing in Development:**
   ```sh
-  npx expo start --tunnel
+  npx expo run:android
+  or 
+  npx expo run:ios
   ```
 - **Creating a Production Build:**
   ```sh
