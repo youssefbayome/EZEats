@@ -69,10 +69,8 @@ This is a **React Native** application built with **Expo**, featuring push notif
 
 ##  Push Notifications Setup
 1. Generate an Expo push token for the device.
-2. Register the device token with the backend.
-3. Handle incoming notifications inside the app.
+2. Handle incoming notifications inside the app.
 
-For production, ensure to set up Firebase for Android and Apple Push Notification service (APNs) for iOS.
 
 ##  Localization Support
 - Implemented using `i18n`.
