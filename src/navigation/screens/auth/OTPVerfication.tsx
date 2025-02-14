@@ -60,11 +60,8 @@ const OTPVerificationScreen = () => {
 
   const verifyOTP = async (otp: string) => {
     setIsLoading(true);
-
     setTimeout(() => {
       dispatch(login(phoneNumber));
-      navigation.navigate("HomeTabs");
-
       setIsLoading(false);
     }, 1000);
   };

@@ -2,10 +2,11 @@ import {
   StyleSheet,
   Text as RNText,
   TextStyle,
-  View,
+  I18nManager,
   StyleProp,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
+import { LanguageContext } from "@/src/context/LanguageContext";
 
 type TypographyVariant = "regular" | "medium" | "bold";
 
@@ -30,7 +31,9 @@ const Text = ({
   size = 14,
   fontFamily,
 }: TextProps) => {
-  
+  const languageContext = useContext(LanguageContext);
+  const { changeLanguage, isRTL, language } = languageContext || {};
+
   const getFontFamily = () => {
     if (fontFamily) return fontFamily;
     switch (variant) {
@@ -51,7 +54,7 @@ const Text = ({
         {
           color,
           fontSize: size,
-          textAlign: align,
+          textAlign: isRTL ? "right" : align,
           fontFamily: getFontFamily(),
         },
         style,

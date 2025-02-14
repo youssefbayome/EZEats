@@ -1,20 +1,22 @@
 import {
   View,
   FlatList,
-  TouchableOpacity,
   StyleSheet,
   useWindowDimensions,
   Pressable,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Colors } from "../../constants/Colors";
 import { orders, readyOrders } from "@/src/lib/data";
 import OrderItem from "@/src/components/Home/Order";
 import Text from "@/src/components/shared/Text";
+import { Locales } from "@/src/lib/locales";
+import { Order } from "@/src/lib/Types";
+import { LanguageContext } from "@/src/context/LanguageContext";
+
 type OrderListProps = {
-  data: any[];
+  data: Order[];
 };
 
 const OrderList = ({ data }: OrderListProps) => {
@@ -28,7 +30,7 @@ const OrderList = ({ data }: OrderListProps) => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>No orders available</Text>
+          <Text>{Locales.t("noOrders")}</Text>
         </View>
       }
     />
@@ -39,13 +41,20 @@ const AllRoute = () => <OrderList data={orders} />;
 const ReadyRoute = () => <OrderList data={readyOrders} />;
 function Home() {
   const layout = useWindowDimensions();
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "All", title: "Home" },
-    { key: "Ready", title: "Ready" },
-  ]);
-
+  const { changeLanguage, isRTL, language } = useContext(LanguageContext) || {};
+  const [routes] = useState(
+    isRTL
+      ? [
+          { key: "Ready", title: Locales.t("ready") },
+          { key: "All", title: Locales.t("Home") },
+        ]
+      : [
+          { key: "All", title: Locales.t("Home") },
+          { key: "Ready", title: Locales.t("ready") },
+        ]
+  );
+  const [index, setIndex] = useState(isRTL ? routes.length - 1 : 0);
+  // console.log(isRTL);
   const renderScene = SceneMap({
     All: AllRoute,
     Ready: ReadyRoute,
@@ -88,6 +97,7 @@ function Home() {
   );
 }
 export default Home;
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F8F8" },
   card: {

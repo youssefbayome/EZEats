@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,6 +18,8 @@ import OrderDetails from "./screens/OrderDetails";
 import { RootState } from "@/store";
 import { login, logout } from "../redux/slices/user";
 import { Locales } from "../lib/locales";
+import { Order } from "../lib/Types";
+import { LanguageContext } from "../context/LanguageContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -41,28 +43,13 @@ const HomeTabs = () => (
 const Navigation = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const [settings, setSettings] = useState<{ language: string } | null>(null);
+  const { changeLanguage, isRTL, language } = useContext(LanguageContext) || {};
 
   const [fontsLoaded] = useFonts({
     "SF-Pro-Display-Regular": require("../../assets/fonts/SF-Pro-Display-Regular.otf"),
     "SF-Pro-Display-Medium": require("../../assets/fonts/SF-Pro-Display-Medium.otf"),
     "SF-Pro-Display-Bold": require("../../assets/fonts/SF-Pro-Display-Bold.otf"),
   });
-
-  useEffect(() => {
-    const loadSelectedLanguage = async () => {
-      try {
-        const selectedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
-        if (selectedLanguage) {
-          setSettings({ language: selectedLanguage });
-        }
-      } catch (error) {
-        console.error("Failed to load language from AsyncStorage:", error);
-      }
-    };
-
-    loadSelectedLanguage();
-  }, []);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -87,7 +74,7 @@ const Navigation = () => {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded || settings === null) {
+  if (!fontsLoaded) {
     return null;
   }
 
@@ -96,7 +83,7 @@ const Navigation = () => {
       linking={{ enabled: true, prefixes: ["ezeats://"] }}
       onReady={onLayoutRootView}
     >
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{}}>
         {!user.isAuthenticated ? (
           <>
             <Stack.Screen
@@ -143,3 +130,17 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
+export type RootStackParamList = {
+  Auth: undefined;
+  HomeTabs: undefined;
+  OTPVerification: { phoneNumber: string | undefined | undefined };
+  OrderDetails: { order: Order };
+  NotFound: undefined;
+};
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}

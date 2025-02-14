@@ -9,7 +9,10 @@
     "newArchEnabled": true,
     "scheme": "ezeats",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +38,10 @@
       "expo-localization"
     ],
     "extra": {
-      "supportsRTL": true
+      "supportsRTL": true,
+      "eas": {
+        "projectId": "1b428a4c-235e-41ee-96ec-e51db7e72091"
+      }
     }
   }
 }

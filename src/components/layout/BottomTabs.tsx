@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import React, { useEffect, useMemo, useRef, useState, useContext } from "react";
+import { TouchableOpacity, StyleSheet, Image, I18nManager } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Colors } from "../../constants/Colors";
 import Icon from "../shared/Icons";
@@ -10,8 +10,11 @@ import {
 } from "@gorhom/bottom-sheet";
 import CustomBottomSheetModal from "../shared/BottomSheet";
 import Button from "../shared/Button";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import View from "../shared/View";
 import { Locales } from "@/src/lib/locales";
+import { writeToStorage } from "@/src/lib/helpers";
+import * as Updates from "expo-updates";
+import { LanguageContext } from "@/src/context/LanguageContext";
 
 const LANGUAGE_KEY = "selectedLanguage";
 
@@ -21,49 +24,26 @@ const BottomTabs = ({
   navigation,
   insets,
 }: BottomTabBarProps) => {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = React.useState({ visible: false, content: "" });
-
-  const [settings, setSettings] = React.useState({
-    language: "auto",
-  });
+  const { changeLanguage, isRTL, language } = useContext(LanguageContext) || {};
+  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "ar">(
+    language || "en"
+  );
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["30%"], []);
-  useEffect(() => {
-    const loadSelectedLanguage = async () => {
-      try {
-        const selectedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
-        if (selectedLanguage) {
-          setSettings({ language: selectedLanguage });
-        }
-      } catch (error) {
-        console.error("Failed to load language from AsyncStorage:", error);
-        setMessage({
-          visible: true,
-          content: "Failed to load language settings.",
-        });
-      }
-    };
-
-    loadSelectedLanguage();
-  }, []);
 
   const handleLanguagePress = () => {
     bottomSheetRef.current?.present();
   };
 
-  const selectLanguage = async (lang: string) => {
+  const saveLanguageSelection = async () => {
     try {
-      await AsyncStorage.setItem(LANGUAGE_KEY, lang);
-      setSettings({ language: lang });
-      Locales.locale = lang;
+      await writeToStorage(LANGUAGE_KEY, selectedLanguage);
+      changeLanguage?.(selectedLanguage);
+      I18nManager.forceRTL(selectedLanguage === "ar");
+      await Updates.reloadAsync();
     } catch (error) {
-      console.error("Failed to save language to AsyncStorage:", error);
-      setMessage({
-        visible: true,
-        content: "Failed to save language settings.",
-      });
+      console.error("Failed to apply language settings:", error);
     }
   };
   return (
@@ -91,10 +71,11 @@ const BottomTabs = ({
               <Text
                 style={[
                   styles.text,
-                  isFocused && { color: Colors.secondary, fontWeight: "bold" },
+                  isFocused && { color: Colors.secondary, fontWeight: "500" },
                 ]}
+                variant={isFocused ? "bold" : "regular"}
               >
-                {route.name}
+                {Locales.t(route.name)}
               </Text>
             </TouchableOpacity>
           );
@@ -104,7 +85,7 @@ const BottomTabs = ({
           onPress={handleLanguagePress}
         >
           <Icon name="Lang" color={"rgba(61, 61, 67, 1)"} />
-          <Text style={styles.text}>Language</Text>
+          <Text style={styles.text}>{Locales.t("language")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -112,45 +93,49 @@ const BottomTabs = ({
         ref={bottomSheetRef}
         initialIndex={0}
         snapPoints={snapPoints}
-        title="Select Language"
+        title={Locales.t("changeLanguage")}
       >
         <View style={styles.bottomSheetContainer}>
-          <View>
+          <View style={{ flexDirection: "column" }}>
             <TouchableOpacity
-              onPress={() => selectLanguage("en")}
+              onPress={() => setSelectedLanguage("en")}
               style={styles.languageOption}
             >
-              <Image
-                source={require("@/src/assets/images/united-states (1) 1.png")}
-                style={styles.flagImage}
-              />
-              <Text style={styles.languageText}>English</Text>
-              {settings.language === "en" ? (
+              <View style={styles.languageWrapper}>
+                <Image
+                  source={require("@/src/assets/images/united-states.png")}
+                  style={styles.flagImage}
+                />
+                <Text style={styles.languageText}>English</Text>
+              </View>
+              {selectedLanguage === "en" && (
                 <Icon name="Check" color="green" size={20} />
-              ) : null}
+              )}
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => selectLanguage("ar")}
+              onPress={() => setSelectedLanguage("ar")}
               style={styles.languageOption}
             >
-              <Image
-                source={require("@/src/assets/images/egypt (2) 1.png")}
-                style={styles.flagImage}
-              />
-              <Text style={styles.languageText}>العربية</Text>
-              {settings.language === "ar" ? (
+              <View style={styles.languageWrapper}>
+                <Image
+                  source={require("@/src/assets/images/egypt.png")}
+                  style={styles.flagImage}
+                />
+                <Text style={styles.languageText}>العربية</Text>
+              </View>
+              {selectedLanguage === "ar" && (
                 <Icon name="Check" color="green" size={20} />
-              ) : null}
+              )}
             </TouchableOpacity>
+
+            <Button
+              title={Locales.t("save")}
+              onPress={saveLanguageSelection}
+              textStyle={{ fontWeight: "600", fontSize: 16 }}
+              style={{ paddingVertical: 15, marginTop: 20 }}
+            />
           </View>
-
-          <Button
-            title={Locales.t("common_close")}
-            onPress={() => bottomSheetRef.current?.close()}
-            textStyle={{ fontWeight: "600", fontSize: 16 }}
-            style={{ paddingVertical: 15, marginTop: 20 }}
-          />
         </View>
       </CustomBottomSheetModal>
     </BottomSheetModalProvider>
@@ -159,7 +144,6 @@ const BottomTabs = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     backgroundColor: "#rgba(255, 255, 255, 1)",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -168,6 +152,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 16,
     elevation: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   tabButton: {
     flex: 1,
@@ -179,13 +166,20 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   bottomSheetContainer: {
+    // paddingHorizontal: 20,
     // paddingVertical: 20,
-    // paddingBottom: 20,
   },
   languageOption: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
+    // paddingVertical: 15,
+    backgroundColor: "#fff",
+  },
+  languageWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
     gap: 10,
   },
   flagImage: {
@@ -195,7 +189,7 @@ const styles = StyleSheet.create({
   },
   languageText: {
     fontSize: 16,
-    flex: 1,
+    flexShrink: 1,
   },
 });
 

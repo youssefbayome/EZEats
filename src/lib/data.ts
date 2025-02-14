@@ -3,7 +3,7 @@ import { Order } from "./Types";
 export const orders: Order[] = [
   {
     id: "1",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "TX-1231",
     time: "19:24 PM",
     type: "PickUp",
@@ -39,7 +39,7 @@ export const orders: Order[] = [
   },
   {
     id: "2",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "S42",
     time: "19:24 PM",
     type: "Delivery",
@@ -75,7 +75,7 @@ export const orders: Order[] = [
   },
   {
     id: "3",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "TX-66",
     time: "19:24 PM",
     type: "Table",
@@ -114,7 +114,7 @@ export const orders: Order[] = [
 export const readyOrders: Order[] = [
   {
     id: "1",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "TX-1231",
     time: "19:24 PM",
     type: "PickUp",
@@ -150,7 +150,7 @@ export const readyOrders: Order[] = [
   },
   {
     id: "2",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "S42",
     time: "19:24 PM",
     type: "Delivery",
@@ -186,7 +186,7 @@ export const readyOrders: Order[] = [
   },
   {
     id: "3",
-    waiter: "Waiter Name",
+    waiterName: "Waiter Name",
     code: "TX-66",
     time: "19:24 PM",
     type: "Table",

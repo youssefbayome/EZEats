@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Colors } from "../../constants/Colors";
-
+import Text from "../shared/Text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "../shared/Icons";
+import { Locales } from "@/src/lib/locales";
 const Header = () => {
   const insets = useSafeAreaInsets();
   return (
@@ -11,7 +12,9 @@ const Header = () => {
       <View style={styles.leftContainer}>
         <Icon name={"HeaderLeftLogo"} style={styles.logoLeft} />
         <View>
-          <Text style={styles.restaurantName}>Restaurant Name</Text>
+          <Text style={styles.restaurantName} variant="bold">
+            {Locales.t("resturantName")}
+          </Text>
           <Text style={styles.timing}>8:00 - 16:00</Text>
         </View>
       </View>
@@ -46,7 +49,7 @@ const styles = StyleSheet.create({
   restaurantName: {
     fontSize: 20,
     color: Colors.text,
-    fontWeight: "bold",
+    fontWeight: "500",
   },
   timing: {
     color: Colors.textSecondary,

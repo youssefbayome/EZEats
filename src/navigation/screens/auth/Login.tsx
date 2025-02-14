@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   TextInput,
@@ -16,10 +16,13 @@ import { Colors } from "@/src/constants/Colors";
 import Text from "@/src/components/shared/Text";
 import Button from "@/src/components/shared/Button";
 import { sendOTP } from "@/src/lib/helpers";
+import { Locales } from "@/src/lib/locales";
+import { LanguageContext } from "@/src/context/LanguageContext";
 const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { changeLanguage, isRTL, language } = useContext(LanguageContext) || {};
 
   const handleLogin = () => {
     if (phoneNumber.length < 11) {
@@ -39,9 +42,7 @@ const LoginScreen = () => {
         <View style={styles.logoContainer}>
           <Icon name="LoginLogo" style={styles.logo} />
         </View>
-        <Text style={styles.subText}>
-          Login to get started with a seamless restaurant management experience
-        </Text>
+        <Text style={styles.subText}>{Locales.t("intro")}</Text>
       </View>
 
       <View style={styles.bottomContainer}>
@@ -53,12 +54,12 @@ const LoginScreen = () => {
               style={styles.icon}
               size={14}
             />
-            <Text style={styles.inputLabel}> Phone Number</Text>
+            <Text style={styles.inputLabel}> {Locales.t("phoneNo")}</Text>
           </View>
 
           <TextInput
-            style={styles.input}
-            placeholder="Please enter your phone number"
+            style={[styles.input, isRTL && { textAlign: "right" }]}
+            placeholder={Locales.t("enterPhone")}
             keyboardType="phone-pad"
             value={phoneNumber}
             onChangeText={setPhoneNumber}
@@ -67,7 +68,7 @@ const LoginScreen = () => {
           />
         </View>
         <Button
-          title="Login"
+          title={Locales.t("login")}
           textStyle={{ fontSize: 20, fontWeight: "600" }}
           style={[styles.button, { backgroundColor: Colors.primary }]}
           onPress={handleLogin}
