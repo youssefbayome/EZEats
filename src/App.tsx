@@ -9,9 +9,9 @@ import { store, persistor } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { LanguageProvider } from "./context/LanguageContext";
 
 export function App() {
-
   const notificationListener = React.useRef<Notifications.Subscription | null>(
     null
   );
@@ -47,7 +47,9 @@ export function App() {
         <BottomSheetModalProvider>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <Navigation />
+              <LanguageProvider>
+                <Navigation />
+              </LanguageProvider>
             </PersistGate>
           </Provider>
           <StatusBar

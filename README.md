@@ -1,65 +1,91 @@
-# Starter Template with React Navigation
+# React Native Expo App
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+## 📌 Overview
+This is a **React Native** application built with **Expo**, featuring push notifications, multi-language support, custom navigation, reusable components, and local storage management.
 
-It includes the following:
+## Features
 
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic deep link and URL handling configuration
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
-- Edge-to-edge configured on Android with [`react-native-edge-to-edge`](https://www.npmjs.com/package/react-native-edge-to-edge)
+###  **Push Notifications**
+- Implemented using **Expo Notifications**.
+- Awaiting production build deployment for testing.
 
-## Getting Started
+###  **Multi-Language Support**
+- Supports **English (en)** and **Arabic (ar)**.
+- Handles **RTL layout adjustments** automatically.
+- Implemented using `i18n` for localization.
 
-1. Create a new project using this template:
+###  **Custom Navigation**
+- Utilized **React Navigation** for seamless app flow.
+- Implemented **custom header and bottom tabs** for a tailored user experience.
 
+###  **Reusable Components**
+- Created **reusable UI components** to maintain clean and modular code.
+- Helps improve maintainability and scalability.
+
+###  **Local Storage**
+- Saves user information locally using **AsyncStorage**.
+- Ensures **data persistence** across app restarts.
+
+##  Tech Stack
+- **Framework:** [React Native](https://reactnative.dev/)
+- **Development Platform:** [Expo](https://expo.dev/)
+- **Navigation:** [React Navigation](https://reactnavigation.org/)
+- **Push Notifications:** [Expo Notifications](https://docs.expo.dev/push-notifications/overview/)
+- **Localization:** `i18n`, `expo-localization`
+- **State Management:** Redux Toolkit (if used)
+- **Storage:** AsyncStorage
+
+## 🔧 Installation & Setup
+1. Clone the repository:
    ```sh
-   npx create-expo-app@latest --template react-navigation/template
+   git clone https://github.com/youssefbayome/EZEats.git
+   cd EZEats
+
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+   or
+   ```sh
+   yarn install
+   ```
+3. Start the Expo development server:
+   ```sh
+   npx expo start
    ```
 
-2. Edit the `app.json` file to configure the `name`, `slug`, `scheme` and bundle identifiers (`ios.bundleIdentifier` and `android.bundleIdentifier`) for your app.
-
-3. Edit the `src/App.tsx` file to start working on your app.
-
-## Running the app
-
-- Install the dependencies:
-
+##  Build & Deployment
+- **Testing in Development:**
   ```sh
-  npm install
+  npx expo start --tunnel
   ```
-
-- Start the development server:
-
+- **Creating a Production Build:**
   ```sh
-  npm start
+  eas build -p android --profile production
+  eas build -p ios --profile production
   ```
+  *(Requires Expo Application Services (EAS) for production builds.)*
 
-- Build and run iOS and Android development builds:
+##  Push Notifications Setup
+1. Generate an Expo push token for the device.
+2. Register the device token with the backend.
+3. Handle incoming notifications inside the app.
 
-  ```sh
-  npm run ios
-  # or
-  npm run android
-  ```
+For production, ensure to set up Firebase for Android and Apple Push Notification service (APNs) for iOS.
 
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
+##  Localization Support
+- Implemented using `i18n`.
+- Automatically detects the user's preferred language.
+- Adjusts layout direction based on RTL or LTR language settings.
 
-## Notes
+##  Development Best Practices
+- **Follow a modular structure** with reusable components.
+- **Ensure accessibility** with proper font sizes and contrast.
 
-This project uses a [development build](https://docs.expo.dev/develop/development-builds/introduction/) and cannot be run with [Expo Go](https://expo.dev/go). To run the app with Expo Go, edit the `package.json` file, remove the `expo-dev-client` package and `--dev-client` flag from the `start` script. However, Edge-to-edge won't work on Expo Go.
+##  Future Enhancements that i already have experience with
+- Integrate **secure authentication** (OAuth, Firebase, or JWT-based login).
+- Improve performance with **offline support** (SQLite, Realm, or MMKV for caching).
+- Implement **dark mode** for better UI adaptability.
 
-We highly recommend using the development builds for normal development and testing.
 
-The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
-
-## Resources
-
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)

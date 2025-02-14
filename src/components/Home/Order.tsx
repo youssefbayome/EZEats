@@ -11,31 +11,40 @@ import {
 import Icon from "../shared/Icons";
 import Button from "../shared/Button";
 import { Colors } from "@/src/constants/Colors";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/src/navigation";
+import { Locales } from "@/src/lib/locales";
+import { formattedTime } from "@/src/lib/helpers";
 
 type OrderItemProps = {
   item: Order;
 };
 
 const OrderItem = React.memo(({ item }: OrderItemProps) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const handlePress = () => {
     navigation.navigate("OrderDetails", { order: item });
   };
   return (
     <Pressable style={styles.card} onPress={handlePress}>
       <View style={styles.row}>
-        <Text style={styles.waiterName}>{item.waiter}</Text>
+        <Text style={styles.waiterName}>
+          {Locales.t("WaiterName")}
+          {/* : {item.waiterName} */}
+        </Text>
         <Text style={styles.code}>{item.code}</Text>
       </View>
       <View style={styles.row}>
         <View style={styles.detailsRow}>
           <Icon name="Clock" size={16} />
-          <Text style={styles.time}>{item.time}</Text>
+          <Text style={styles.time}>
+            {Locales.t("Time")}: {item.time}
+          </Text>
         </View>
         <View style={styles.detailsRow}>
           <Icon name={item.type} size={16} />
-          <Text style={styles.type}>{item.type}</Text>
+          <Text style={styles.type}>{Locales.t(item.type)}</Text>
         </View>
       </View>
       <View style={styles.buttons}>
@@ -45,25 +54,23 @@ const OrderItem = React.memo(({ item }: OrderItemProps) => {
             item.smsEnabled ? styles.activeButton : styles.disabledButton,
           ]}
           disabled={!item.smsEnabled}
-          title="Send SMS"
+          title={Locales.t("SendSMS")}
           onPress={() => console.log("Send SMS")}
           icon="Sms"
-          iconPosition="left"
-          textStyle={{
-            fontSize: 13,
-          }}
           iconStyle={{
             width: 16,
             height: 16,
+          }}
+          textStyle={{
+            fontSize: 13,
           }}
         />
 
         <Button
           style={[styles.button, styles.activeButton]}
-          title="Picked Up"
+          title={Locales.t("PickedUp")}
           onPress={() => console.log("Picked Up")}
           icon="PickedUp"
-          iconPosition="left"
           iconStyle={{
             width: 16,
             height: 16,

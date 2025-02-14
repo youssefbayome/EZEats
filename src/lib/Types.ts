@@ -1,6 +1,6 @@
 export type Order = {
   id: string;
-  waiter: string;
+  waiterName: string;
   code: string;
   time: string;
   type: string;

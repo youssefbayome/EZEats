@@ -9,6 +9,8 @@ import { Colors } from "@/src/constants/Colors";
 import { Order } from "@/src/lib/Types";
 import Text from "@/src/components/shared/Text";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { Alert } from "react-native";
+import { Locales } from "@/src/lib/locales";
 
 const OrderDetailsScreen = () => {
   const route = useRoute();
@@ -16,6 +18,24 @@ const OrderDetailsScreen = () => {
   const { order } = route.params as { order: Order };
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
+
+  const handleRefund = () => {
+    Alert.alert(
+      "Management Approval Required",
+      `This action requires management approval. Do you want to refund order with ${order.code}?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Continue",
+          onPress: () => {},
+          style: "destructive",
+        },
+      ]
+    );
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -25,7 +45,7 @@ const OrderDetailsScreen = () => {
           textStyle={{
             fontWeight: "600",
           }}
-          onPress={() => {}}
+          onPress={handleRefund}
         />
       ),
 
@@ -43,7 +63,9 @@ const OrderDetailsScreen = () => {
       <Card>
         <View style={styles.clientRow}>
           <View>
-            <Text style={styles.clientName}>{order.clientName}</Text>
+            <Text style={styles.clientName} variant="bold">
+              {Locales.t("clientName")}
+            </Text>
             <Text style={styles.orderId}>{order.code}</Text>
           </View>
           <Pressable
@@ -61,22 +83,25 @@ const OrderDetailsScreen = () => {
         </View>
       </Card>
 
-      <Card title="Order Status">
+      <Card title={Locales.t("orderStatus")}>
         <View style={styles.statusRow}>
-          <Text style={styles.statusText}>Ordered At</Text>
+          <Text style={styles.statusText}>{Locales.t("orderTime")}</Text>
           <Text>{order.time}</Text>
         </View>
         <View style={styles.statusRow}>
-          <Text style={styles.statusText}>Order Type</Text>
-          <Text>{order.type}</Text>
+          <Text style={styles.statusText}>{Locales.t("Type")}</Text>
+          <Text>{Locales.t(order.type)}</Text>
         </View>
         <View style={styles.statusRow}>
-          <Text style={styles.statusText}>Order Price</Text>
+          <Text style={styles.statusText}>{Locales.t("totalPrice")}</Text>
           <Text>{order.price} EGP</Text>
         </View>
       </Card>
 
-      <Card title={`Item Details (${order.items.length})`} isExpandable>
+      <Card
+        title={`${Locales.t("orderItems")} (${order.items.length})`}
+        isExpandable
+      >
         {order.items.map((item, index) => (
           <View
             key={index}
@@ -106,7 +131,7 @@ const OrderDetailsScreen = () => {
               </View>
               {item.extras && item.extras.length > 0 && (
                 <View>
-                  <Text style={styles.extrasTitle}>Extras:</Text>
+                  <Text style={styles.extrasTitle}>{Locales.t("Extras")}</Text>
                   {item.extras.map((extra, i) => (
                     <View
                       key={i}
