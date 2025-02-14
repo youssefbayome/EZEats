@@ -32,7 +32,7 @@ This is a **React Native** application built with **Expo**, featuring push notif
 - **Navigation:** [React Navigation](https://reactnavigation.org/)
 - **Push Notifications:** [Expo Notifications](https://docs.expo.dev/push-notifications/overview/)
 - **Localization:** `i18n`, `expo-localization`
-- **State Management:** Redux Toolkit (if used)
+- **State Management:** Redux Toolkit
 - **Storage:** AsyncStorage
 
 ## 🔧 Installation & Setup
